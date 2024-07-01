@@ -220,14 +220,27 @@ vec4 sampleAndBlend(
 #endif
 
 #ifdef APPLY_SPLIT
+    float splitMode = czm_splitMode;
     float splitPosition = czm_splitPosition;
-    // Split to the left
-    if (split < 0.0 && gl_FragCoord.x > splitPosition) {
-       alpha = 0.0;
+    if(splitMode == 1.0){
+        // Split to the left
+        if (split < 0.0 && gl_FragCoord.x > splitPosition) {
+            alpha = 0.0;
+        }
+        // Split to the right
+        else if (split > 0.0 && gl_FragCoord.x < splitPosition) {
+            alpha = 0.0;
+        }
     }
-    // Split to the right
-    else if (split > 0.0 && gl_FragCoord.x < splitPosition) {
-       alpha = 0.0;
+    else{
+        // Split to the bottom
+        if (split < 0.0 && gl_FragCoord.y > splitPosition) {
+            alpha = 1.0;
+        }
+        // Split to the top
+        else if (split > 0.0 && gl_FragCoord.y < splitPosition) {
+            alpha = 0.0;
+        }
     }
 #endif
 

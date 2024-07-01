@@ -1487,6 +1487,21 @@ Object.defineProperties(Scene.prototype, {
   },
 
   /**
+   * Gets or sets the mode of the splitter within the viewport.  Valid values are 0.0 or 1.0.
+   * @memberof Scene.prototype
+   *
+   * @type {number}
+   */
+  splitMode: {
+    get: function () {
+      return this._frameState.splitMode;
+    },
+    set: function (value) {
+      this._frameState.splitMode = value;
+    },
+  },
+
+  /**
    * The distance from the camera at which to disable the depth test of billboards, labels and points
    * to, for example, prevent clipping against terrain. When set to zero, the depth test should always
    * be applied. When less than zero, the depth test should never be applied. Setting the disableDepthTestDistance

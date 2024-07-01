@@ -175,6 +175,7 @@ function UniformState() {
   this._invertClassificationColor = undefined;
 
   this._splitPosition = 0.0;
+  this._splitMode = 1.0;
   this._pixelSizePerMeter = undefined;
   this._geometricToleranceOverMeter = undefined;
 
@@ -1128,6 +1129,17 @@ Object.defineProperties(UniformState.prototype, {
   },
 
   /**
+   * The splitter splitMode to use when rendering with a splitter.
+   * @memberof UniformState.prototype
+   * @type {number}
+   */
+  splitMode: {
+    get: function () {
+      return this._splitMode;
+    },
+  },
+
+  /**
    * The distance from the camera at which to disable the depth test of billboards, labels and points
    * to, for example, prevent clipping against terrain. When set to zero, the depth test should always
    * be applied. When less than zero, the depth test should never be applied.
@@ -1424,6 +1436,7 @@ UniformState.prototype.update = function (frameState) {
   this._mapProjection = frameState.mapProjection;
   this._ellipsoid = frameState.mapProjection.ellipsoid;
   this._pixelRatio = frameState.pixelRatio;
+  this._splitMode = frameState.splitMode;
 
   const camera = frameState.camera;
   this.updateCamera(camera);
@@ -1548,8 +1561,13 @@ UniformState.prototype.update = function (frameState) {
   );
 
   // Convert the relative splitPosition to absolute pixel coordinates
-  this._splitPosition =
-    frameState.splitPosition * frameState.context.drawingBufferWidth;
+  if (frameState.splitMode === 1.0) {
+    this._splitPosition =
+      frameState.splitPosition * frameState.context.drawingBufferWidth;
+  } else {
+    this._splitPosition =
+      frameState.splitPosition * frameState.context.drawingBufferHeight;
+  }
   const fov = camera.frustum.fov;
   const viewport = this._viewport;
   let pixelSizePerMeter;

@@ -1728,6 +1728,23 @@ const AutomaticUniforms = {
   }),
 
   /**
+   * An automatic GLSL uniform representing the splitter model to use when rendering with a splitter.
+   *
+   * @example
+   * // GLSL declaration
+   * uniform float czm_splitMode;
+   */
+  czm_splitMode: new AutomaticUniform({
+    size: 1,
+    datatype: WebGLConstants.FLOAT,
+    getValue: function (uniformState) {
+      // console.log("aipinsui_20240628");
+      // console.log(uniformState.splitMode);
+      return uniformState.splitMode;
+    },
+  }),
+
+  /**
    * An automatic GLSL uniform scalar representing the geometric tolerance per meter
    */
   czm_geometricToleranceOverMeter: new AutomaticUniform({
