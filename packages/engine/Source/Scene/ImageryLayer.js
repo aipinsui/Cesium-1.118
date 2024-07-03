@@ -103,7 +103,6 @@ import TileImagery from "./TileImagery.js";
  *                          the gamma value to use for the tile.  The function is executed for every
  *                          frame and for every tile, so it must be fast.
  * @property {SplitDirection|Function} [splitDirection=SplitDirection.NONE] The {@link SplitDirection} split to apply to this layer.
- * @property {number|Function} [splitMode=1.0] The {@link SplitMode} split to apply to this layer.
  * @property {TextureMinificationFilter} [minificationFilter=TextureMinificationFilter.LINEAR] The
  *                                    texture minification filter to apply to this layer. Possible values
  *                                    are <code>TextureMinificationFilter.LINEAR</code> and
@@ -278,17 +277,6 @@ function ImageryLayer(imageryProvider, options) {
   this.splitDirection = defaultValue(
     options.splitDirection,
     ImageryLayer.DEFAULT_SPLIT
-  );
-
-  /**
-   * The {@link SplitMode} to apply to this layer.
-   *
-   * @type {number}
-   * @default {@link ImageryLayer.DEFAULT_SPLIT_MODE}
-   */
-  this.splitMode = defaultValue(
-    options.splitMode,
-    ImageryLayer.DEFAULT_SPLIT_MODE
   );
 
   /**
@@ -494,14 +482,6 @@ ImageryLayer.DEFAULT_GAMMA = 1.0;
  * @default SplitDirection.NONE
  */
 ImageryLayer.DEFAULT_SPLIT = SplitDirection.NONE;
-
-/**
- * This value is used as the default split for the imagery layer if one is not provided during construction
- * or by the imagery provider.
- * @type {number}
- * @default 1.0
- */
-ImageryLayer.DEFAULT_SPLIT_MODE = 1.0;
 
 /**
  * This value is used as the default texture minification filter for the imagery layer if one is not provided

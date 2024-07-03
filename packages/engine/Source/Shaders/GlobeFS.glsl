@@ -235,7 +235,7 @@ vec4 sampleAndBlend(
     else{
         // Split to the bottom
         if (split < 0.0 && gl_FragCoord.y > splitPosition) {
-            alpha = 1.0;
+            alpha = 0.0;
         }
         // Split to the top
         else if (split > 0.0 && gl_FragCoord.y < splitPosition) {
