@@ -357,6 +357,14 @@ function FrameState(context, creditDisplay, jobScheduler) {
   this.splitPosition = 0.0;
 
   /**
+   * The mode of the splitter to use when rendering different things on either side of a splitter.
+   * This value should be 0.0 or 1.0 with 0 being the far left of the viewport and 1 being the far right of the viewport.
+   * @type {number}
+   * @default 1.0
+   */
+  this.splitMode = 1.0;
+
+  /**
    * Distances to the near and far planes of the camera frustums
    * @type {number[]}
    * @default []

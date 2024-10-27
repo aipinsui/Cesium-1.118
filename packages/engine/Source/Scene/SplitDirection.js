@@ -16,6 +16,14 @@ const SplitDirection = {
   LEFT: -1.0,
 
   /**
+   * Display the primitive or ImageryLayer to the bottom of the {@link Scene#splitPosition}.
+   *
+   * @type {number}
+   * @constant
+   */
+  BOTTOM: -1.0,
+
+  /**
    *  Always display the primitive or ImageryLayer.
    *
    * @type {number}
@@ -30,5 +38,13 @@ const SplitDirection = {
    * @constant
    */
   RIGHT: 1.0,
+
+  /**
+   * Display the primitive or ImageryLayer to the top of the {@link Scene#splitPosition}.
+   *
+   * @type {number}
+   * @constant
+   */
+  TOP: 1.0,
 };
 export default Object.freeze(SplitDirection);

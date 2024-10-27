@@ -1330,7 +1330,7 @@ const AutomaticUniforms = {
     getValue: function (uniformState) {
       return Matrix4.getTranslation(
         uniformState.inverseView,
-        viewerPositionWCScratch
+        viewerPositionWCScratch,
       );
     },
   }),
@@ -1709,6 +1709,23 @@ const AutomaticUniforms = {
     datatype: WebGLConstants.FLOAT,
     getValue: function (uniformState) {
       return uniformState.splitPosition;
+    },
+  }),
+
+  /**
+   * An automatic GLSL uniform representing the splitter model to use when rendering with a splitter.
+   *
+   * @example
+   * // GLSL declaration
+   * uniform float czm_splitMode;
+   */
+  czm_splitMode: new AutomaticUniform({
+    size: 1,
+    datatype: WebGLConstants.FLOAT,
+    getValue: function (uniformState) {
+      // console.log("aipinsui_20240628");
+      // console.log(uniformState.splitMode);
+      return uniformState.splitMode;
     },
   }),
 
