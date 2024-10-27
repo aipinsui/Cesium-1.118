@@ -1454,7 +1454,7 @@ const AutomaticUniforms = {
    * // Example: For a given roughness and NdotV value, find the material's BRDF information in the red and green channels
    * float roughness = 0.5;
    * float NdotV = dot(normal, view);
-   * vec2 brdfLut = texture(czm_brdfLut, vec2(NdotV, 1.0 - roughness)).rg;
+   * vec2 brdfLut = texture(czm_brdfLut, vec2(NdotV, roughness)).rg;
    */
   czm_brdfLut: new AutomaticUniform({
     size: 1,
@@ -1484,7 +1484,7 @@ const AutomaticUniforms = {
   }),
 
   /**
-   * An automatic GLSL uniform containing the specular environment map atlas used within the scene.
+   * An automatic GLSL uniform containing the specular environment cube map used within the scene.
    *
    * @example
    * // GLSL declaration
@@ -1499,22 +1499,7 @@ const AutomaticUniforms = {
   }),
 
   /**
-   * An automatic GLSL uniform containing the size of the specular environment map atlas used within the scene.
-   *
-   * @example
-   * // GLSL declaration
-   * uniform vec2 czm_specularEnvironmentMapSize;
-   */
-  czm_specularEnvironmentMapSize: new AutomaticUniform({
-    size: 1,
-    datatype: WebGLConstants.FLOAT_VEC2,
-    getValue: function (uniformState) {
-      return uniformState.specularEnvironmentMapsDimensions;
-    },
-  }),
-
-  /**
-   * An automatic GLSL uniform containing the maximum level-of-detail of the specular environment map atlas used within the scene.
+   * An automatic GLSL uniform containing the maximum valid level-of-detail of the specular environment cube map used within the scene.
    *
    * @example
    * // GLSL declaration
@@ -1724,23 +1709,6 @@ const AutomaticUniforms = {
     datatype: WebGLConstants.FLOAT,
     getValue: function (uniformState) {
       return uniformState.splitPosition;
-    },
-  }),
-
-  /**
-   * An automatic GLSL uniform representing the splitter model to use when rendering with a splitter.
-   *
-   * @example
-   * // GLSL declaration
-   * uniform float czm_splitMode;
-   */
-  czm_splitMode: new AutomaticUniform({
-    size: 1,
-    datatype: WebGLConstants.FLOAT,
-    getValue: function (uniformState) {
-      // console.log("aipinsui_20240628");
-      // console.log(uniformState.splitMode);
-      return uniformState.splitMode;
     },
   }),
 

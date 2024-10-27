@@ -49,7 +49,7 @@ uniform vec4 u_colorsToAlpha[TEXTURE_UNITS];
 uniform vec4 u_dayTextureTexCoordsRectangle[TEXTURE_UNITS];
 #endif
 
-#ifdef SHOW_REFLECTIVE_OCEAN
+#if defined(HAS_WATER_MASK) && (defined(SHOW_REFLECTIVE_OCEAN) || defined(APPLY_MATERIAL))
 uniform sampler2D u_waterMask;
 uniform vec4 u_waterMaskTranslationAndScale;
 uniform float u_zoomedOutOceanSpecularIntensity;
@@ -220,27 +220,14 @@ vec4 sampleAndBlend(
 #endif
 
 #ifdef APPLY_SPLIT
-    float splitMode = czm_splitMode;
     float splitPosition = czm_splitPosition;
-    if(splitMode == 1.0){
-        // Split to the left
-        if (split < 0.0 && gl_FragCoord.x > splitPosition) {
-            alpha = 0.0;
-        }
-        // Split to the right
-        else if (split > 0.0 && gl_FragCoord.x < splitPosition) {
-            alpha = 0.0;
-        }
+    // Split to the left
+    if (split < 0.0 && gl_FragCoord.x > splitPosition) {
+       alpha = 0.0;
     }
-    else{
-        // Split to the bottom
-        if (split < 0.0 && gl_FragCoord.y > splitPosition) {
-            alpha = 0.0;
-        }
-        // Split to the top
-        else if (split > 0.0 && gl_FragCoord.y < splitPosition) {
-            alpha = 0.0;
-        }
+    // Split to the right
+    else if (split > 0.0 && gl_FragCoord.x < splitPosition) {
+       alpha = 0.0;
     }
 #endif
 
@@ -375,7 +362,7 @@ void main()
     float fade = 0.0;
 #endif
 
-#ifdef SHOW_REFLECTIVE_OCEAN
+#if defined(HAS_WATER_MASK) && (defined(SHOW_REFLECTIVE_OCEAN) || defined(APPLY_MATERIAL))
     vec2 waterMaskTranslation = u_waterMaskTranslationAndScale.xy;
     vec2 waterMaskScale = u_waterMaskTranslationAndScale.zw;
     vec2 waterMaskTextureCoordinates = v_textureCoordinates.xy * waterMaskScale + waterMaskTranslation;
@@ -383,17 +370,19 @@ void main()
 
     float mask = texture(u_waterMask, waterMaskTextureCoordinates).r;
 
+    #ifdef SHOW_REFLECTIVE_OCEAN
     if (mask > 0.0)
     {
         mat3 enuToEye = czm_eastNorthUpToEyeCoordinates(v_positionMC, normalEC);
 
-        vec2 ellipsoidTextureCoordinates = czm_ellipsoidWgs84TextureCoordinates(normalMC);
-        vec2 ellipsoidFlippedTextureCoordinates = czm_ellipsoidWgs84TextureCoordinates(normalMC.zyx);
+        vec2 ellipsoidTextureCoordinates = czm_ellipsoidTextureCoordinates(normalMC);
+        vec2 ellipsoidFlippedTextureCoordinates = czm_ellipsoidTextureCoordinates(normalMC.zyx);
 
         vec2 textureCoordinates = mix(ellipsoidTextureCoordinates, ellipsoidFlippedTextureCoordinates, czm_morphTime * smoothstep(0.9, 0.95, normalMC.z));
 
         color = computeWaterColor(v_positionEC, textureCoordinates, enuToEye, color, mask, fade);
     }
+    #endif
 #endif
 
 #ifdef APPLY_MATERIAL
@@ -405,6 +394,10 @@ void main()
     materialInput.slope = v_slope;
     materialInput.height = v_height;
     materialInput.aspect = v_aspect;
+    #ifdef HAS_WATER_MASK
+        materialInput.waterMask = mask;
+    #endif
+
     czm_material material = czm_getMaterial(materialInput);
     vec4 materialColor = vec4(material.diffuse, material.alpha);
     color = alphaBlend(materialColor, color);
@@ -435,7 +428,7 @@ void main()
 #ifdef ENABLE_CLIPPING_POLYGONS
     vec2 clippingPosition = v_clippingPosition;
     int regionIndex = v_regionIndex;
-    clipPolygons(u_clippingDistance, CLIPPING_POLYGON_REGIONS_LENGTH, clippingPosition, regionIndex);    
+    clipPolygons(u_clippingDistance, CLIPPING_POLYGON_REGIONS_LENGTH, clippingPosition, regionIndex);
 #endif
 
 #ifdef HIGHLIGHT_FILL_TILE
@@ -502,7 +495,7 @@ void main()
             #endif
 
             #ifndef HDR
-                fogColor.rgb = czm_acesTonemapping(fogColor.rgb);
+                fogColor.rgb = czm_pbrNeutralTonemapping(fogColor.rgb);
                 fogColor.rgb = czm_inverseGamma(fogColor.rgb);
             #endif
 
