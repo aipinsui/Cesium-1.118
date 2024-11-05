@@ -1,7 +1,7 @@
 [
 	{
 		"id": "document",
-		"name": "geoeye_satellite",
+		"name": "satellite_track",
 		"version": "1.0",
 		"clock": {
 			"interval": "2012-03-15T10:00:00Z/2012-03-16T10:00:00Z",
