@@ -97,7 +97,7 @@ Object.defineProperties(Credit.prototype, {
         const div = document.createElement("div");
         div.className = "cesium-credit-wrapper";
         div._creditId = this._id;
-        div.style.display = "inline";
+        div.style.display = "none";
         div.innerHTML = html;
 
         const links = div.querySelectorAll("a");
